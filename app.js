@@ -32,7 +32,7 @@ function MainApp(){
 
 function createFile(){
     let fl = new Document(dir.getPath());
-    
+
     repInterface(fl);
     readCommands(fl);
 };
@@ -42,7 +42,7 @@ function openDoc(){
     dir.createdir();
 
     rl.question(message.requestFileName, (name) => {
-        if(file.exists(name)){
+        if(file.fileExists(name)){
             openFl(file, name);
         } else {
             console.log(message.fileNoFound);
@@ -61,7 +61,7 @@ function openFl(file, name){
 
 function repInterface(fl, m){
     process.stdout.write('\033c');
-    (fl.getName == '') ? console.log('| Untitle |') : console.log(`| ${fl.getName} |`);
+    (fl.getName() == '') ? console.log('| Untitle |') : console.log(`| ${fl.getName()} |`);
 
     console.log(message.comands);
 
@@ -70,14 +70,14 @@ function repInterface(fl, m){
 };
 
 function readCommands(fl){
-    rl.question('line', (i) => {
+    rl.on('line', (i) => {
         switch(i.trim()){
             case 'A':
-                saveasfile(fl);
+                svasfl(fl);
             break;
 
             case 'S':
-                save(fl);
+                sv(fl);
             break;
 
             case 'Q':
@@ -85,35 +85,36 @@ function readCommands(fl){
                 MainApp();
             break;
 
-            default: fl.append(i.trim());
+            default:
+                // fl.append(i.trim());
         }
     })
 };
 
-function saveasfile(fl){
+function svasfl(fl){
     rl.question(message.requestFileName, (name) => {
-        if(fl.exists(name)){
+        if(fl.fileExists(name)){
             console.log(message.fileFound);
             rl.question(message.replaceFile, (confirm) => {
-                if(confirm == 'y'){
-                    file.saveasfile(name);
+                if(confirm = 'y'){
+                    fl.saveAsFile(name);
                     repInterface(fl, message.fileSaved + '\n');
                 } else {
                     repInterface(fl, message.fileNoFound + '\n');
                 }
             })
         } else {
-            fl.saveasfile(name);
+            fl.saveAsFile(name);
             repInterface(fl, message.fileSaved + '\n');
         }
     })
 };
 
-function save(fl){
-    if(file.hasName()){
-        fl.save();
+function sv(fl){
+    if(fl.hasName()){
+        fl.saveFile();
         repInterface(fl, message.fileSaved + '\n');
     } else {
-        saveasfile(fl);
+        svasfl(fl);
     }
 };

@@ -9,12 +9,14 @@ class Directory {
     };
 
     createdir(){
-        this.address = path.join(this.address, this.folder);
+        // this.address = path.join(this.address, this.folder);
+        this.address = this.address;
+
         if(!fs.existsSync(this.folder)){
-            console.log('created a new folder');
+            console.log('Created a new folder!');
             fs.mkdirSync(this.folder);
         } else {
-            console.log(`folder ${this.address} already exists`);
+            console.log(`* folder directory * --> ${this.address}`);
         }
     };
 
@@ -30,10 +32,8 @@ class Directory {
     showfiles(){
         let files = fs.readdirSync(this.address);
         console.log(
-            '=== ' + this.getShortPath + ' ===\n',
-            files.forEach((f) => {
-                f
-            })
+            '=== ' + this.getShortPath() + ' ===\n',
+            files.forEach((f) => { f })
         );
     };
 }
